@@ -20,6 +20,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function run() {
      try {
           const servicesCollection = client.db('bongorent').collection('services')
+          const commentsCollection = client.db('bongorent').collection('comment')
 
           app.get('/services', async (req, res) => {
                const query = {}
@@ -48,6 +49,19 @@ async function run() {
           app.post('/allservices', async (req, res) => {
                const services = req.body;
                const result = await servicesCollection.insertOne(services)
+               res.send(result)
+          })
+
+
+          app.get('/comments', async(req, res)=>{
+               const query = {};
+               const cursor = commentsCollection.find(query);
+               const comment = await cursor.toArray();
+               res.send(comment)
+          })
+          app.post('/comments', async(req, res)=>{
+               const comment = req.body;
+               const result = await commentsCollection.insertOne(comment)
                res.send(result)
           })
 

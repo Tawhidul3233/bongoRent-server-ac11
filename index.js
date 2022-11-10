@@ -22,12 +22,13 @@ async function run() {
           const servicesCollection = client.db('bongorent').collection('services')
           const commentsCollection = client.db('bongorent').collection('comment')
 
+           // get data from database
           app.get('/services', async (req, res) => {
                const query = {}
                const cursor = servicesCollection.find(query)
                const services = await cursor.limit(3).toArray()
                res.send(services)
-               console.log(services)
+               
           })
 
           app.get('/allservices', async (req, res) => {
@@ -35,7 +36,7 @@ async function run() {
                const cursor = servicesCollection.find(query)
                const services = await cursor.toArray()
                res.send(services)
-               console.log(services)
+               
           })
 
           app.get('/servicesdetails/:id', async (req, res) => {
@@ -43,28 +44,30 @@ async function run() {
                const query = { _id: ObjectId(id) };
                const result = await servicesCollection.findOne(query);
                res.send(result)
-               console.log(result)
+               
           })
 
+          // send data to database
           app.post('/allservices', async (req, res) => {
                const services = req.body;
                const result = await servicesCollection.insertOne(services)
                res.send(result)
           })
 
-
+     // get data from database
           app.get('/comments', async(req, res)=>{
                const query = {};
                const cursor = commentsCollection.find(query);
                const comment = await cursor.toArray();
                res.send(comment)
           })
+
+          // send data to database
           app.post('/comments', async(req, res)=>{
                const comment = req.body;
                const result = await commentsCollection.insertOne(comment)
                res.send(result)
           })
-
      }
      finally {
 
